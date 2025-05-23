@@ -1,0 +1,90 @@
+"use client";
+import React, { useEffect, useState } from 'react';
+import { toast } from "sonner";
+import { EmblaOptionsType } from 'embla-carousel';
+import SlimHeroBanner from '@/components/SlimHeroBanner';
+import ClassNamesPlugin from 'embla-carousel-class-names'
+import Autoplay from 'embla-carousel-autoplay'
+import PageComponent from '@/components/PageComponent';
+import LazyLoadComponent from '@/components/LazyLoadComponent';
+//import { GetServerSideProps } from "next";
+
+const autoplayOptions = {
+  delay: 4000, // 4 seconds
+  stopOnInteraction: false, // Keep autoplaying even after user interaction
+  stopOnMouseEnter: true
+};
+const OPTIONS: EmblaOptionsType = { loop: true };
+const PLUGINS = [ClassNamesPlugin(), Autoplay(autoplayOptions)];
+
+
+const HomePage = () => {
+  const [slides, setSlides] = useState([]);
+  const [placementData, setPlacementData] = useState<any>([]);
+
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+        const res = await fetch(`${baseUrl}/banners/home`, {
+          cache: 'no-store',
+        });
+        const json = await res.json();
+
+        if (json.meta?.message === 'success') {
+          const filtered = json.data.filter((banner: any) =>
+            ['hb2', 'hb3', 'hb4'].includes(banner.placement_id)
+          );
+
+          setSlides(filtered);
+        }
+      } catch (error) {
+        console.error('Error fetching banners:', error);
+      }
+    };
+
+    const fetchPlacementData = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/v1/relevance/keyword?keyword=*&lang=en&placements=home_page.web_rank1|home_page.web_rank2|home_page.web_rank4");
+        const data = await res.json();
+        setPlacementData(data.placements); // assuming you want to set the first placement
+      } catch (error) {
+        console.error("Error fetching placement data:", error);
+      }
+    };
+
+    fetchBanners();
+    fetchPlacementData();
+  }, []);
+
+  const showToast = () => {
+    toast(<div className="p-md md:rounded-lg flex items-center bg-yellow-300 px-md py-sm text-black" data-testid="card-container">
+      <img alt="Yay! You met the minimum order value, and you can check out your cart now!" loading="lazy" width="24" height="32" decoding="async" data-nimg="1" className="mr-xs" src="https://cdnprod.mafretailproxy.com/bff-assets/images/toast_mov_met.png" style={{ color: 'transparent' }} />
+      <div className="text-md leading-5 font-bold">Yay! You met the minimum order value, and you can check out your cart now!</div>
+    </div>, {
+      style: {
+        backgroundColor: 'rgb(253 224 71 / 1)',
+      },
+    });
+  };
+
+  return (
+    <div>
+      <main className="flex-1 w-full max-w-[1232px] pb-8 mx-auto min-w-0">
+        <SlimHeroBanner slides={slides} options={OPTIONS} plugins={PLUGINS} />
+        <PageComponent pageId={27874} />
+
+        <LazyLoadComponent
+          importFunc={() => import('@/components/ProductCarousel')}
+          componentProps={{ data: placementData }}
+        />
+        <LazyLoadComponent
+          importFunc={() => import('@/components/OffersCarousel')}
+          componentProps={{ pageId: 35406 }}
+        />
+      </main>
+    </div>
+  );
+};
+
+export default HomePage;

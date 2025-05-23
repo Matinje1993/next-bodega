@@ -1,0 +1,196 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id                String              @id
+  storeId           String?
+  key               String?             @map("categories.key")
+  name              String?
+  title             String?
+  url               String?
+  parentId          String?             @db.VarChar(255)
+  parent            Category?           @relation("CategoryToChildren", fields: [parentId], references: [id])
+  children          Category[]          @relation("CategoryToChildren")
+  image             String?
+  store             Int?
+  nameAr            String?
+  nameKa            String?
+  mediaWeb          String?
+  mediaMobile       String?
+  mediaWebAr        String?
+  mediaMobileAr     String?
+  mediaWebKa        String?
+  mediaMobileKa     String?
+  ctaUrl            String?
+  bgColor           String?
+  bg_color          String?
+  thumbnail         String?
+  level             Int?
+  count             Int?
+  facetName         String?
+  index             String?             @map("_index")
+  score             Int?                @map("_score")
+  CategoryOnProduct CategoryOnProduct[]
+
+  @@map("categories")
+}
+
+model Product {
+  id                       Int     @id
+  ean                      String  @unique
+  name                     String
+  type                     String
+  preorder                 Boolean
+  isExpress                Boolean
+  productOrigin            String?
+  supplier                 String
+  isBulk                   Boolean
+  bulkMessage              String
+  isScalable               Boolean
+  size                     String?
+  isFBC                    Boolean
+  isMarketPlace            Boolean
+  foodType                 String?
+  productCategoriesHearchi String
+  soldByWeight             Boolean
+  isRecommendable          Boolean
+
+  brandId String? // nullable FK to Brand
+  brand   Brand?  @relation(fields: [brandId], references: [id])
+
+  category     CategoryOnProduct[]
+  deliveryFees DeliveryFee?
+  price        Price               @relation(fields: [priceId], references: [id])
+  priceId      String
+  offers       Offer[]
+
+  stockId String @unique
+  stock   Stock  @relation(fields: [stockId], references: [id])
+
+  unitId String
+  unit   Unit   @relation(fields: [unitId], references: [id])
+
+  promoVoucher      Json?
+  promoBadges       Json[]
+  amendableOrders   Json[]
+  servingIntents    String[]
+  availableVariants Json[]
+  variants          Json[]
+
+  linksId String @unique
+  links   Links  @relation(fields: [linksId], references: [id])
+
+  availability   Availability? @relation(fields: [availabilityId], references: [id])
+  availabilityId Int?          @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Brand {
+  id       String    @id
+  name     String?
+  products Product[]
+}
+
+model CategoryOnProduct {
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  @@id([productId, categoryId])
+}
+
+model DeliveryFee {
+  id                    String   @id @default(cuid())
+  freeDeliveryThreshold Int
+  productId             Int?     @unique
+  product               Product? @relation(fields: [productId], references: [id])
+}
+
+model Price {
+  id             String    @id @default(cuid())
+  currency       String
+  price          Float
+  formattedValue String
+  discount       Discount? @relation(fields: [discountId], references: [id])
+  discountId     String?
+  minBuyingValue String
+  Product        Product[]
+}
+
+model Discount {
+  id             String   @id @default(cuid())
+  price          Float
+  endDate        DateTime
+  type           String
+  formattedValue String
+  value          Int
+  minBuyingValue String
+  Price          Price[]
+}
+
+model Offer {
+  id                 String @id
+  sellerName         String
+  shopId             String
+  type               String
+  purchaseIndicators Json
+  shippingIndicator  String
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Stock {
+  id               String   @id @default(cuid())
+  stockLevelStatus String
+  value            Int?
+  product          Product? @relation
+}
+
+model Unit {
+  id            String @id @default(cuid())
+  unitOfMeasure String
+  itemsPerUnit  Int
+  incrementBy   Float
+  size          String
+  max           Int
+  min           Float
+  unitItem      Int
+  maxToOrder    Int
+
+  products Product[]
+}
+
+model Links {
+  id            String   @id @default(cuid())
+  images        Json
+  productUrl    Json
+  tracking      Json
+  defaultImages String[]
+
+  product Product?
+}
+
+model Availability {
+  id          Int      @id @default(autoincrement())
+  isAvailable Boolean
+  max         Int
+  product     Product?
+}
