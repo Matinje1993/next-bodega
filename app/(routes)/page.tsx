@@ -25,8 +25,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchBanners = async () => {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-        const res = await fetch(`${baseUrl}/banners/home`, {
+        const res = await fetch(`/api/v1/banners/home`, {
           cache: 'no-store',
         });
         const json = await res.json();
@@ -45,7 +44,7 @@ const HomePage = () => {
 
     const fetchPlacementData = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/v1/relevance/keyword?keyword=*&lang=en&placements=home_page.web_rank1|home_page.web_rank2|home_page.web_rank4");
+        const res = await fetch("/api/v1/relevance/keyword?keyword=*&lang=en&placements=home_page.web_rank1|home_page.web_rank2|home_page.web_rank4");
         const data = await res.json();
         setPlacementData(data.placements); // assuming you want to set the first placement
       } catch (error) {

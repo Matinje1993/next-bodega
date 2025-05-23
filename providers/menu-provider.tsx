@@ -23,8 +23,7 @@ export const MenuProvider: React.FC<ProviderProps> = ({ children }) => {
     useEffect(() => {
         const fetchMenuData = async () => {
             try {
-                const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-                const response = await fetch(`${baseUrl}/menu`, {
+                const response = await fetch(`/api/v1/menu`, {
                     cache: 'no-store',
                 });
                 const data = await response.json();

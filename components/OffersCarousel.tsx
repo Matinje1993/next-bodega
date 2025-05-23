@@ -45,8 +45,7 @@ const OffersCarousel: React.FC<PropType> = ({ pageId }) => {
     useEffect(() => {
         // Fetch the data using the provided pageId
         const fetchData = async () => {
-            const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-            const res = await fetch(`${baseUrl}/frame/page-components?ids=${pageId}`, {
+            const res = await fetch(`/api/v1/frame/page-components?ids=${pageId}`, {
                 cache: 'no-store',
             });
             const json = await res.json();
