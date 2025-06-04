@@ -68,6 +68,9 @@ model Product {
   soldByWeight             Boolean
   isRecommendable          Boolean
 
+  highlight   String?
+  description String?
+
   brandId String? // nullable FK to Brand
   brand   Brand?  @relation(fields: [brandId], references: [id])
 
@@ -98,6 +101,8 @@ model Product {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  orderItems OrderItem[]
 }
 
 model Brand {
@@ -193,4 +198,56 @@ model Availability {
   isAvailable Boolean
   max         Int
   product     Product?
+}
+
+model Address {
+  id                   String  @id @default(cuid())
+  clerkUserId          String // Clerk user ID as string
+  number               String
+  building             String
+  street               String
+  area                 String
+  landmark             String?
+  instructions         String?
+  deliveryInstructions String?
+  country              String  @default("+254")
+  phone                String
+  fullName             String
+  addressLabel         String?
+
+  latitude  Float? // GPS latitude, optional
+  longitude Float? // GPS longitude, optional
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Order     Order[]
+
+  @@index([clerkUserId])
+}
+
+model Order {
+  id                String   @id @default(cuid())
+  clerkUserId       String
+  status            String
+  totalAmount       Float
+  deliveryFee       Float
+  deliveryAddressId String? // FK to Address
+  deliveryAddress   Address? @relation(fields: [deliveryAddressId], references: [id])
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  items OrderItem[]
+
+  @@index([clerkUserId])
+}
+
+model OrderItem {
+  id        String @id @default(cuid())
+  orderId   String
+  productId Int
+  quantity  Int
+  price     Float
+
+  order Order @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
 }

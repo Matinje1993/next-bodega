@@ -10,12 +10,13 @@ const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
   const [timeLeft, setTimeLeft] = useState<string>("");
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     const update = () => {
       const now = new Date();
       const diff = targetDate.getTime() - now.getTime();
 
       if (diff <= 0) {
-        setTimeLeft("Time's up!");
+        setTimeLeft("");
         clearInterval(timer);
         return;
       }
@@ -28,7 +29,7 @@ const Countdown: React.FC<CountdownProps> = ({ targetDate }) => {
     };
 
     update();
-    const timer = setInterval(update, 1000);
+    timer = setInterval(update, 1000);
 
     return () => clearInterval(timer);
   }, [targetDate]);

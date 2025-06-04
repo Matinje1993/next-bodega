@@ -15,6 +15,8 @@ export interface Product {
     id: string | number;
     name: string;
   };
+  highlight?: string;
+  description?: string;
   productOrigin?: string;
   supplier?: string;
   delivery?: any[]; // You can refine this type if you have delivery details
@@ -94,13 +96,13 @@ export interface Product {
 }
 
 export interface Discount {
-    id: string;
-    price: number;
-    endDate: Date;
-    type: string;
-    formattedValue: string;
-    value: number;
-    minBuyingValue: string;
+  id: string;
+  price: number;
+  endDate: Date;
+  type: string;
+  formattedValue: string;
+  value: number;
+  minBuyingValue: string;
 }
 
 export interface Image {

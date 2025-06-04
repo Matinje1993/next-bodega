@@ -38,6 +38,13 @@ const ProductCard: React.FC<ProductCard> = ({ product }) => {
         '0.00'
     ).split('.');
     const isActive = activeProductId === product.id && itemExists(product);
+    if (
+        product?.price?.discount &&
+        new Date(product.price.discount.endDate) <= new Date()
+    ) {
+        product.price.discount = null;
+    }
+
     return (
         <div>
             <ul className="bg-white rounded-[16px] p-3 m-0 relative shadow-none border border-[#efefef] font-montserrat w-auto h-[283px] md:h-[303px] md:p-3">

@@ -1,1 +1,11 @@
-{}
+{
+  "/(routes)/page": "app/(routes)/page.js",
+  "/app/checkout/page": "app/app/checkout/page.js",
+  "/api/v1/frame/page-components/route": "app/api/v1/frame/page-components/route.js",
+  "/api/v1/relevance/keyword/route": "app/api/v1/relevance/keyword/route.js",
+  "/api/v1/banners/home/route": "app/api/v1/banners/home/route.js",
+  "/(routes)/my-account/page": "app/(routes)/my-account/page.js",
+  "/(routes)/my-account/orders/page": "app/(routes)/my-account/orders/page.js",
+  "/app/checkout/orderConfirmation/[orderId]/page": "app/app/checkout/orderConfirmation/[orderId]/page.js",
+  "/(routes)/app/cart/page": "app/(routes)/app/cart/page.js"
+}

@@ -37,7 +37,14 @@ const useCart = create(
           (item) => item.id === data.id && item.size === data.size
         );
 
-        const basePrice = data?.price?.discount?.minBuyingValue
+        if (
+          data?.price?.discount &&
+          new Date(data.price.discount.endDate) <= new Date()
+        ) {
+          data.price.discount = null;
+        }
+
+        const basePrice = data.price?.discount?.minBuyingValue
           ? parseFloat(data.price.discount.minBuyingValue)
           : data?.price?.minBuyingValue
             ? parseFloat(data.price.minBuyingValue)

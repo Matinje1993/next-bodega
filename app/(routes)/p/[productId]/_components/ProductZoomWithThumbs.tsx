@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Thumbs, Navigation, Pagination } from 'swiper/modules'
 import ReactImageMagnify from 'react-image-magnify';
@@ -8,9 +8,19 @@ import ReactImageMagnify from 'react-image-magnify';
 export default function ProductZoomWithThumbs({ product }) {
     const [thumbsSwiper, setThumbsSwiper] = useState(null)
     const [activeIndex, setActiveIndex] = useState(0)
+    const [hasMounted, setHasMounted] = useState(false)
+
+    useEffect(() => {
+        setHasMounted(true)
+    }, [])
+
+    if (!hasMounted) {
+        // Render placeholder or nothing on server and during hydration
+        return null;
+    }
 
     return (
-        <div className="w-full max-w-md overflow-visible relative">
+        <>
             {/* Main Image Swiper */}
             <Swiper
                 modules={[Thumbs, Navigation, Pagination]}
@@ -20,7 +30,7 @@ export default function ProductZoomWithThumbs({ product }) {
                 spaceBetween={10}
                 slidesPerView={1}
                 onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
-                className="swiper-container m-0 min-w-0 mb-4 p-0"
+                className="main swiper-container m-0 min-w-0 mb-4 p-0"
             >
                 {product?.links?.images?.map((img, index) => (
                     <SwiperSlide key={index} tag="a" className="m-0 min-w-0 bg-white rounded-lg overflow-hidden no-underline w-full flex items-center justify-center min-h-[480px]">
@@ -72,7 +82,7 @@ export default function ProductZoomWithThumbs({ product }) {
                         <img
                             src={img.href}
                             alt={product.name}
-                            className={`h-[60px w-[60px] rounded hover:border-black transition`}
+                            className="h-[60px] w-[60px] rounded hover:border-black transition"
                         />
                     </SwiperSlide>
                 ))}
@@ -83,6 +93,6 @@ export default function ProductZoomWithThumbs({ product }) {
                 id="zoom-portal"
                 className="box-border m-0 min-w-0 absolute top-0 left-full ml-6 z-[3] drop-shadow-md"
             />
-        </div>
+        </>
     )
 }
