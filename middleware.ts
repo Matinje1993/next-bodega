@@ -1,9 +1,9 @@
 import { authMiddleware } from "@clerk/nextjs";
 
 export default authMiddleware({
-  publicRoutes: ["/:path*"],
+  publicRoutes: ["/login", "/register", "/"],
 });
 
 export const config = {
-  matcher: [], // Don't run middleware on /api, _next, or static files
+  matcher: ["/((?!api|trpc|_next|.*\\..*).*)"], // Don't run middleware on /api, _next, or static files
 };
