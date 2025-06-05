@@ -1,25 +1,25 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { PrismaClient } from '@/lib/generated/prisma';
 import CheckoutClient from "./CheckoutClient";
+import { getServerSession } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 
 export default async function CheckoutPage() {
-    const { userId } = auth();
+    const session = await getServerSession();
 
-    if (!userId) redirect("/login?redirect_url=%2Fapp%2Fcheckout");
+    if (!session) redirect("/login?redirect=%2Fapp%2Fcheckout");
 
     const defaultAddress = await prisma.address.findFirst({
         where: {
-            clerkUserId: userId,
+            clerkUserId: session.user.id,
             isDefault: true,
         },
     })
 
     const addressToUse = defaultAddress ?? (
         await prisma.address.findFirst({
-            where: { clerkUserId: userId },
+            where: { clerkUserId: session.user.id },
             orderBy: { createdAt: 'desc' }
         })
     )

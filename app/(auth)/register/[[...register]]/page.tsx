@@ -1,37 +1,13 @@
-import { SignUp } from "@clerk/nextjs";
+import RegisterForm from "./RegisterForm";
+
+export const metadata = {
+    title: "Register",
+    description: `Cart for e-ecommerce, selling products, and new productivity`,
+};
 
 export default function Page() {
-    return (
-        <SignUp
-            appearance={{
-                variables: {
-                    colorBackground: "#19191A",
-                    colorInputBackground: "#19191A",
-                    colorAlphaShade: "white",
-                    colorText: "white",
-                    colorInputText: "white",
-                },
-                elements: {
-                    logoImage: {},
 
-                    socialButtonsProviderIcon__github: {
-                        filter: "brightness(0) invert(1)",
-                    },
-                    rootBox: {
-                        "@media (max-width: 640px)": {
-                            width: "100%",
-                            ".cl-internal-105jsc1": {
-                                width: "100%",
-                            },
-                        },
-                    },
-                    footer: {
-                        "& + div": {
-                            background: "rgb(49, 49, 51)",
-                        },
-                    },
-                },
-            }}
-        />
+    return (
+        <RegisterForm />
     );
 }

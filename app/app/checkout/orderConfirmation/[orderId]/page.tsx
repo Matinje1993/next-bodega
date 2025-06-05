@@ -1,21 +1,22 @@
 import Link from "next/link";
-import { auth, clerkClient } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { notFound } from "next/navigation";
 import { PrismaClient } from '@/lib/generated/prisma';
+import { getServerSession } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 
 export default async function OrderConfirmation({ params }: { params: { orderId: string } }) {
-    const { userId } = auth();
+    const session = await getServerSession();
 
-    if (!userId) redirect("/");
+    if (!session) redirect("/");
 
-    // Fetch user details from Clerk
-    const clerkUser = await clerkClient.users.getUser(userId);
+    const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+    });
 
     // Get email
-    const email = clerkUser.emailAddresses[0]?.emailAddress || null;
+    const email = user.email || null;
 
     const order = await prisma.order.findUnique({
         where: { id: params.orderId },

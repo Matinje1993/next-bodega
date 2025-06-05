@@ -3,7 +3,6 @@ import "./globals.css";
 import { siteConfig } from "@/config/site";
 import { MenuProvider } from "@/providers/menu-provider";
 import Body from "@/components/layout-body";
-import { ClerkProvider } from "@clerk/nextjs";
 import { Montserrat } from 'next/font/google';
 import { SidebarDialogProvider } from "@/lib/sidebar-dialog-context";
 
@@ -28,15 +27,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={montserrat.variable}>
-      <ClerkProvider>
-        <MenuProvider>
-          <Body>
-            <SidebarDialogProvider>
-              {children}
-            </SidebarDialogProvider>
-          </Body>
-        </MenuProvider>
-      </ClerkProvider>
+      <MenuProvider>
+        <Body>
+          <SidebarDialogProvider>
+            {children}
+          </SidebarDialogProvider>
+        </Body>
+      </MenuProvider>
     </html>
   );
 }

@@ -1,7 +1,6 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { PrismaClient } from '@/lib/generated/prisma';
-import { clerkClient } from "@clerk/nextjs";
+import { getServerSession } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 
@@ -11,12 +10,14 @@ export const metadata = {
 };
 
 export default async function MyAccountPage() {
-    const { userId } = auth();
+    const session = await getServerSession();
 
-    if (!userId) redirect("/login?redirect_url=%2Fmy-account%2Fprofile");
+    if (!session) redirect("/login?redirect=%2Fmy-account%2Fprofile");
 
-    const user = await clerkClient.users.getUser(userId);
-    const phone = user.phoneNumbers[0]?.phoneNumber || null;
+    const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+    });
+    const phone = user.phoneNumber || null;
 
 
     return (<div className="m-0 min-w-0 pt-[65px] ml-0 flex-1 md:pt-0 md:ml-6">
@@ -39,7 +40,7 @@ export default async function MyAccountPage() {
                         <h4 className="m-0 mb-1 min-w-0">
                             Email Address
                         </h4>
-                        <p>{user.emailAddresses[0]?.emailAddress || null}</p>
+                        <p>{user.email || null}</p>
                     </div>
                 </div>
                 <div className="m-0 mb-4 min-w-0 flex relative items-center px-0 xs:[flex-basis:50%] xs:px-4 md:[flex-basis:auto] lg:mb-0 first:pl-0">
@@ -51,7 +52,7 @@ export default async function MyAccountPage() {
                             Mobile Number
                         </h4>
                         <p>
-                            {phone ? phone :
+                            {phone ? user.countryCode + ' ' + phone :
                                 <a className="text-blue-700 text-sm cursor-pointer outline-none transition-shadow transition-colors duration-300 rounded-md h-12 font-bold no-underline">Add Phone Number</a>
                             }
                         </p>

@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@/lib/generated/prisma';
-import { auth } from "@clerk/nextjs";
+import { getServerSession } from '@/lib/auth';
 
 const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
-    const { userId } = auth();
-    if (!userId) {
+    const session = await getServerSession();
+    if (!session) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     try {
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 
         const order = await prisma.order.create({
             data: {
-                clerkUserId: userId,
+                clerkUserId: session.user.id,
                 status: '1',
                 totalAmount: totalPrice,
                 deliveryFee: 500,

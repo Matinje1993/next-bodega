@@ -1,1 +1,10 @@
-{}
+{
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/app/checkout/page": "app/app/checkout/page.js",
+  "/api/v1/menu/route": "app/api/v1/menu/route.js",
+  "/(routes)/my-account/page": "app/(routes)/my-account/page.js",
+  "/(auth)/login/[[...login]]/page": "app/(auth)/login/[[...login]]/page.js",
+  "/(routes)/app/cart/page": "app/(routes)/app/cart/page.js",
+  "/(routes)/my-account/profile/page": "app/(routes)/my-account/profile/page.js",
+  "/(routes)/my-account/orders/page": "app/(routes)/my-account/orders/page.js"
+}

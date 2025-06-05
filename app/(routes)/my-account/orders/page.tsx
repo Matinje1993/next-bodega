@@ -1,7 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { PrismaClient } from '@/lib/generated/prisma';
 import OrderNotFound from "./OrderNotFound";
+import { getServerSession } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 
@@ -11,12 +11,12 @@ export const metadata = {
 };
 
 export default async function MyAccountPage() {
-    const { userId } = auth();
+    const session = await getServerSession();
 
-    if (!userId) redirect("/login?redirect_url=%2Fmy-account%2Fprofile");
+    if (!session) redirect("/login?redirect=%2Fmy-account%2Fprofile");
 
     const orders = await prisma.order.findMany({
-        where: { clerkUserId: userId },
+        where: { clerkUserId: session.user.id },
         include: {
             items: {
                 include: {

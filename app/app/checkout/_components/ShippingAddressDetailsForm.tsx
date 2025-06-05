@@ -1,18 +1,26 @@
 'use client';
 import FloatingLabelInput from "@/components/ui/FloatingLabelInput";
 import { useSidebarDialog, useSwitchSidebarDialog } from "@/lib/sidebar-dialog-context";
-import { useUser } from '@clerk/clerk-react';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import AddShippingAddressForm from "./AddShippingAddressForm";
+import { useRouter } from 'next/navigation';
 
 export default function ShippingAddressDetailsForm({ selected }) {
-    const { isLoaded, user } = useUser();
+    const { data: session, status } = useSession();
+    const router = useRouter();
+
     const [loading, setLoading] = useState(false);
     const switchSidebarDialog = useSwitchSidebarDialog();
     const { showSidebarDialog } = useSidebarDialog();
-    if (!isLoaded) {
+    if (status === 'loading') {
         return <div>Loading...</div>;
     }
+    if (status === 'unauthenticated') {
+        router.push(`/login?redirect=${encodeURIComponent('/app/checkout')}`);
+    }
+
+    const user = session?.user;
     const [formData, setFormData] = useState({
         number: '',
         building: '',
@@ -31,7 +39,7 @@ export default function ShippingAddressDetailsForm({ selected }) {
         deliveryInstructions: '',
         country: '+254',
         phone: '',
-        fullName: user.fullName,
+        fullName: user.name,
         addressLabel: '',
         lat: selected?.lat || null,
         lon: selected?.lon || null,

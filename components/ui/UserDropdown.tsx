@@ -1,15 +1,14 @@
 'use client';
 
-import { SignOutButton } from "@clerk/nextjs";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 
 type Props = {
-    firstName: string | null;
-    lastName: string | null;
+    name: string | null;
 };
 
-const UserDropdown: React.FC<Props> = ({ firstName, lastName }) => {
+const UserDropdown: React.FC<Props> = ({ name }) => {
     const [showDropdown, setShowDropdown] = useState(false);
 
     return (
@@ -32,7 +31,7 @@ const UserDropdown: React.FC<Props> = ({ firstName, lastName }) => {
                         <div className="m-[0px_8px] min-w-0 flex flex-col lg:flex-row not-italic">
                             <div className="m-0 min-w-0 flex flex-row lg:flex-col">
                                 <span className="mt-0 ml-0 min-w-0 text-[12px] font-normal mr-[4px] mb-0 text-white lg:mr-0">Welcome back</span>
-                                <span className="m-0 min-w-0 text-[12px] font-normal text-white lg:font-bold">{firstName} {lastName}</span>
+                                <span className="m-0 min-w-0 text-[12px] font-normal text-white lg:font-bold">{name}</span>
                             </div>
                         </div>
                     </div>
@@ -48,9 +47,9 @@ const UserDropdown: React.FC<Props> = ({ firstName, lastName }) => {
                             <Link href="/my-account/orders" className="m-0 min-w-0 pt-1 pb-1 text-[#2d2d2d] text-sm no-underline block hover:text-[#0E5AA7]">My Orders</Link>
                         </li>
                         <li className="m-0 min-w-0  last:border-0 border-b border-gray-100 font-medium px-6 py-3">
-                            <SignOutButton>
-                                <a className="cursor-pointer m-0 min-w-0 pt-1 pb-1 text-[#2d2d2d] text-sm no-underline block hover:text-[#0E5AA7]">Logout</a>
-                            </SignOutButton>
+
+                            <a className="cursor-pointer m-0 min-w-0 pt-1 pb-1 text-[#2d2d2d] text-sm no-underline block hover:text-[#0E5AA7]" onClick={() => signOut({ callbackUrl: '/' })}>Logout</a>
+
                         </li>
                     </ul>
                 </div>

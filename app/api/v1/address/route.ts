@@ -1,11 +1,11 @@
-import { auth } from '@clerk/nextjs/server'
 import { PrismaClient } from '@/lib/generated/prisma';
+import { getServerSession } from '@/lib/auth';
 
 const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
-    const { userId } = auth()
-    if (!userId) return new Response('Unauthorized', { status: 401 })
+    const session = await getServerSession();
+    if (!session.user.id) return new Response('Unauthorized', { status: 401 })
 
     const data = await req.json()
 
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
             addressLabel,
             latitude: parseFloat(lat),
             longitude: parseFloat(lon),
-            clerkUserId: userId,
+            clerkUserId: session.user.id,
         },
     })
 

@@ -1,8 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { PrismaClient } from '@/lib/generated/prisma';
 import Link from "next/link";
-import { clerkClient } from "@clerk/nextjs";
+import { getServerSession } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 
@@ -12,23 +11,26 @@ export const metadata = {
 };
 
 export default async function MyAccountPage() {
-    const { userId } = auth();
+    const session = await getServerSession();
 
-    if (!userId) redirect("/login?redirect_url=%2Fmy-account");
+    if (!session) redirect("/login?redirect=%2Fmy-account");
 
-    const user = await clerkClient.users.getUser(userId);
-    const phone = user.phoneNumbers[0]?.phoneNumber || null;
+    const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+    });
+
+    const phone = user.phoneNumber || null;
 
     const defaultAddress = await prisma.address.findFirst({
         where: {
-            clerkUserId: userId,
+            clerkUserId: user.id,
             isDefault: true,
         },
     })
 
     const addressToUse = defaultAddress ?? (
         await prisma.address.findFirst({
-            where: { clerkUserId: userId },
+            where: { clerkUserId: user.id },
             orderBy: { createdAt: 'desc' }
         })
     )
@@ -53,7 +55,7 @@ export default async function MyAccountPage() {
                         <h4 className="m-0 mb-1 min-w-0">
                             Email Address
                         </h4>
-                        <p>{user.emailAddresses[0]?.emailAddress || null}</p>
+                        <p>{user.email || null}</p>
                     </div>
                 </div>
                 <div className="m-0 mb-4 min-w-0 flex relative items-center px-0 xs:[flex-basis:50%] xs:px-4 md:[flex-basis:auto] lg:mb-0 first:pl-0">
@@ -65,7 +67,7 @@ export default async function MyAccountPage() {
                             Mobile Number
                         </h4>
                         <p>
-                            {phone ? phone :
+                            {phone ? user.countryCode + ' ' + phone :
                                 <a className="text-blue-700 text-sm cursor-pointer outline-none transition-shadow transition-colors duration-300 rounded-md h-12 font-bold no-underline">Add Phone Number</a>
                             }
                         </p>

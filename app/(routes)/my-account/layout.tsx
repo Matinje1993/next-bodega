@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SignOutButton } from "@clerk/nextjs";
+import { signOut } from "next-auth/react";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
@@ -80,18 +80,16 @@ const layout = ({ children }: { children: React.ReactNode }) => {
                                 </svg>
                                 My Addresses
                             </Link>
-                            <SignOutButton>
-                                <a className="cursor-pointer m-0 min-w-auto uppercase text-[#4D4D4D] pl-2 pr-2 pt-4 pb-4 flex items-center border-t border-[#E6E6E6] no-underline md:pl-6 md:pr-6 md:pt-5 md:pb-5 md:normal-case">
-                                    <svg height="24" width="24" viewBox="0 0 24 24" className="hidden md:block md:mr-4">
-                                        <g fill="#4D4D4D">
-                                            <path d="M19.9,10.7l-4.3-4.3L14.8,7l3.4,3.4h-6.9v1h7l-3.4,3.4l0.7,0.7l4.2-4.2C20,11.2,20,10.9,19.9,10.7L19.9,10.7z"></path>
-                                            <path d="M12.7,18.8h-2.5V4.7c0-0.2-0.1-0.4-0.3-0.5L6.9,3h5.8v6.6h1V2.5c0-0.3-0.2-0.5-0.5-0.5l0,0H4.5 C4.2,2,4,2.2,4,2.5l0,0v16.9c0,0.2,0.1,0.4,0.3,0.5L9.5,22c0.1,0,0.1,0,0.2,0c0.3,0,0.5-0.2,0.5-0.5v-1.7h3c0.3,0,0.5-0.2,0.5-0.5 l0,0v-6.8h-1V18.8z M9.2,20.8L5,19.1V3.3L9.2,5V20.8z"></path>
-                                            <ellipse cx="8.3" cy="11.9" rx="0.3" ry="0.4"></ellipse>
-                                        </g>
-                                    </svg>
-                                    Logout
-                                </a>
-                            </SignOutButton>
+                            <a className="cursor-pointer m-0 min-w-auto uppercase text-[#4D4D4D] pl-2 pr-2 pt-4 pb-4 flex items-center border-t border-[#E6E6E6] no-underline md:pl-6 md:pr-6 md:pt-5 md:pb-5 md:normal-case" onClick={() => signOut({ callbackUrl: '/' })}>
+                                <svg height="24" width="24" viewBox="0 0 24 24" className="hidden md:block md:mr-4">
+                                    <g fill="#4D4D4D">
+                                        <path d="M19.9,10.7l-4.3-4.3L14.8,7l3.4,3.4h-6.9v1h7l-3.4,3.4l0.7,0.7l4.2-4.2C20,11.2,20,10.9,19.9,10.7L19.9,10.7z"></path>
+                                        <path d="M12.7,18.8h-2.5V4.7c0-0.2-0.1-0.4-0.3-0.5L6.9,3h5.8v6.6h1V2.5c0-0.3-0.2-0.5-0.5-0.5l0,0H4.5 C4.2,2,4,2.2,4,2.5l0,0v16.9c0,0.2,0.1,0.4,0.3,0.5L9.5,22c0.1,0,0.1,0,0.2,0c0.3,0,0.5-0.2,0.5-0.5v-1.7h3c0.3,0,0.5-0.2,0.5-0.5 l0,0v-6.8h-1V18.8z M9.2,20.8L5,19.1V3.3L9.2,5V20.8z"></path>
+                                        <ellipse cx="8.3" cy="11.9" rx="0.3" ry="0.4"></ellipse>
+                                    </g>
+                                </svg>
+                                Logout
+                            </a>
                         </nav>
                     </div>
                     {children}
