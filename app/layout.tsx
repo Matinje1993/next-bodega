@@ -4,8 +4,8 @@ import { siteConfig } from "@/config/site";
 import { MenuProvider } from "@/providers/menu-provider";
 import Body from "@/components/layout-body";
 import { Montserrat } from 'next/font/google';
-import { SidebarDialogProvider } from "@/lib/sidebar-dialog-context";
-import { SessionProvider } from "next-auth/react";
+import { SidebarDialogProvider } from "@/lib/sidebar-dialog-context"
+import { Providers } from "@/providers/session-provider";
 
 const montserrat = Montserrat({
   subsets: ['latin'],      // or ['latin', 'cyrillic', etc.]
@@ -30,11 +30,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={montserrat.variable}>
       <MenuProvider>
         <Body>
-          <SessionProvider>
+          <Providers>
             <SidebarDialogProvider>
               {children}
             </SidebarDialogProvider>
-          </SessionProvider>
+          </Providers>
         </Body>
       </MenuProvider>
     </html>
