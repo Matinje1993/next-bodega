@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/lib/generated/prisma';
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/db";
 
 function parseFilterString(filterStr: string | undefined) {
     if (!filterStr) return {};
@@ -68,6 +66,9 @@ export async function GET(req: Request, { params }: { params: { categoryId: stri
                                 is: {
                                     value: {
                                         gt: 0,
+                                    },
+                                    endDate: {
+                                        gt: new Date(),
                                     },
                                 },
                             },

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, startTransition } from "react";
 import useCart from "@/hooks/use-cart";
 import { useLoadingStore } from "@/stores/loadingStore";
 import { useErrorStore } from "@/stores/useErrorStore";
@@ -43,7 +43,9 @@ export default function OrderSummary({ address }) {
             const data = await res.json();
             clearError();
             useCart.getState().removeAllCart();
-            router.push(`/app/checkout/orderConfirmation/${data.id}`);
+            startTransition(() => {
+                router.push(`/app/checkout/orderConfirmation/${data.id}`);
+            });
         } catch (err: any) {
             console.error("Checkout error:", err.message);
             setError(err.message || "Unexpected error occurred");

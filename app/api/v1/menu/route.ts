@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/lib/generated/prisma';
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/db";
 
 // Recursively format category and its children
 function formatCategory(cat: any): any {

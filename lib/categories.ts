@@ -1,6 +1,4 @@
-import { PrismaClient } from '@/lib/generated/prisma';
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/db";
 
 export async function getChildrenCategories(parentId: string) {
   return await prisma.category.findMany({

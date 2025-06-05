@@ -1,10 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { notFound } from "next/navigation";
-import { PrismaClient } from '@/lib/generated/prisma';
 import { getServerSession } from "@/lib/auth";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/db";
 
 export default async function OrderConfirmation({ params }: { params: { orderId: string } }) {
     const session = await getServerSession();

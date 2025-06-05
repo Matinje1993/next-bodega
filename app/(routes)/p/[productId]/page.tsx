@@ -1,6 +1,6 @@
 import ProductZoomWithThumbs from "./_components/ProductZoomWithThumbs";
 import Link from "next/link";
-import { PrismaClient } from '@/lib/generated/prisma';
+import { prisma } from "@/lib/db";
 import { notFound } from 'next/navigation'
 import Countdown from "./_components/Countdown";
 import { Metadata } from "next";
@@ -8,8 +8,6 @@ import AddToCart from "./_components/AddToCart";
 import Highlights from "./_components/highlights";
 import ToggleShare from "./_components/ToggleShare";
 import DOMPurify from 'dompurify';
-
-const prisma = new PrismaClient()
 
 interface ProductPageProps {
     params: {

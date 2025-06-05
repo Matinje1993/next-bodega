@@ -1,9 +1,7 @@
 import { redirect } from "next/navigation";
-import { PrismaClient } from '@/lib/generated/prisma';
+import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { getServerSession } from "@/lib/auth";
-
-const prisma = new PrismaClient();
 
 export const metadata = {
     title: "My account",

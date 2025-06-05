@@ -1,6 +1,4 @@
-import { PrismaClient } from "@/lib/generated/prisma";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/db";
 
 type ProductSortKeys = "createdAt" | "updatedAt" | "name" | "id" | "ean" | "type";
 

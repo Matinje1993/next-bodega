@@ -1,9 +1,7 @@
 import { redirect } from "next/navigation";
-import { PrismaClient } from '@/lib/generated/prisma';
 import CheckoutClient from "./CheckoutClient";
 import { getServerSession } from "@/lib/auth";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/db";
 
 export default async function CheckoutPage() {
     const session = await getServerSession();

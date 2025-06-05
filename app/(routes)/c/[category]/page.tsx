@@ -1,11 +1,9 @@
 import { type Metadata } from "next";
 import Link from "next/link";
-import { PrismaClient } from '@/lib/generated/prisma';
+import { prisma } from "@/lib/db";
 import { notFound } from 'next/navigation';
 import { getChildrenCategories } from '@/lib/categories';
 import CategoryPageWrapper from "./CategoryPageWrapper";
-
-const prisma = new PrismaClient();
 
 function parseFilterString(filterStr: string | undefined) {
     if (!filterStr) return {};

@@ -1,7 +1,5 @@
-import { PrismaClient } from '@/lib/generated/prisma';
+import { prisma } from "@/lib/db";
 import { getServerSession } from '@/lib/auth';
-
-const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
     const session = await getServerSession();
