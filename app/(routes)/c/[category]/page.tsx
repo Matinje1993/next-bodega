@@ -129,6 +129,9 @@ const CategoryPage = async ({
                                 value: {
                                     gt: 0,
                                 },
+                                endDate: {
+                                    gt: new Date(),
+                                },
                             },
                         },
                     }
@@ -191,6 +194,9 @@ const CategoryPage = async ({
                             is: {
                                 value: {
                                     gt: 0,
+                                },
+                                endDate: {
+                                    gt: new Date(),
                                 },
                             },
                         },

@@ -133,6 +133,9 @@ export async function GET(req: Request, { params }: { params: { categoryId: stri
                                     value: {
                                         gt: 0,
                                     },
+                                    endDate: {
+                                        gt: new Date(),
+                                    },
                                 },
                             },
                         }
