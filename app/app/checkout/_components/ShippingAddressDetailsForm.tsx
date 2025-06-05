@@ -220,7 +220,7 @@ export default function ShippingAddressDetailsForm({ selected }) {
                     </a>
                     <button
                         type="button"
-                        className={`px-6 border border-white outline-none transition duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] text-sm normal-case ${isFormValid || !loading ? 'opacity-100' : 'opacity-10 pointer-events-none'} text-white font-bold h-12 w-[202px] font-montserrat rounded-lg flex items-center justify-center mt-3.5 leading-5 bg-[#0e5aa7]`}
+                        className={`px-6 border border-white outline-none transition duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] text-sm normal-case ${isFormValid && !loading ? 'opacity-100' : 'opacity-10 pointer-events-none'} text-white font-bold h-12 w-[202px] font-montserrat rounded-lg flex items-center justify-center mt-3.5 leading-5 bg-[#0e5aa7]`}
                         disabled={!isFormValid || loading}
                         onClick={handleSubmit}>
                         Save
