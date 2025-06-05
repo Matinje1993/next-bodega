@@ -5,6 +5,7 @@ import { MenuProvider } from "@/providers/menu-provider";
 import Body from "@/components/layout-body";
 import { Montserrat } from 'next/font/google';
 import { SidebarDialogProvider } from "@/lib/sidebar-dialog-context";
+import { SessionProvider } from "next-auth/react";
 
 const montserrat = Montserrat({
   subsets: ['latin'],      // or ['latin', 'cyrillic', etc.]
@@ -29,9 +30,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={montserrat.variable}>
       <MenuProvider>
         <Body>
-          <SidebarDialogProvider>
-            {children}
-          </SidebarDialogProvider>
+          <SessionProvider>
+            <SidebarDialogProvider>
+              {children}
+            </SidebarDialogProvider>
+          </SessionProvider>
         </Body>
       </MenuProvider>
     </html>
